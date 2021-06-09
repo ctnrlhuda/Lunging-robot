@@ -1,0 +1,60 @@
+Blynk application
+Code:
+#define BLYNK_PRINT Serial // Comment this out to disable prints and save space
+#include <ESP8266WiFi.h>
+#include <SPI.h>
+#include <BlynkSimpleEsp8266.h>
+unsigned long interval1 = 420000;
+unsigned long interval1 = 480000;
+unsigned long previousMillis=0;
+BlynkTimer timer1;
+BlynkTimer timer2;
+float sensorData;
+
+char auth[] = "nzbHBAtelT6vR7AweI37rTrJIPFt8Gaq";
+char ssid[] = "rahimbee@unifi";// Your WiFi credentials.
+char pass[] = "23575884";// Set password to "" for open networks.
+void sendAnalog1()
+{
+ sensorData = analogRead(A0);
+ if (sensorData > 800)
+ { Blynk.notify( "The horse heartbeat exceed limit! Turn off the machine");
+ }
+ Blynk.virtualWrite(V5, sensorData);
+ Blynk.virtualWrite(V1, LOW);
+ Blynk.virtualWrite(V2, HIGH);
+}
+void sendAnalog2()
+{
+ sensorData = analogRead(A0);
+ if (sensorData > 800)
+ { Blynk.notify( "The horse heartbeat exceed limit! Turn off the machine");
+ }
+ Blynk.virtualWrite(V5, sensorData);
+ Blynk.virtualWrite(V1, LOW);
+ Blynk.virtualWrite(V2, HIGH);
+}
+void setup()
+{
+ Serial.begin(9600);
+ Blynk.begin(auth, ssid, pass);
+ timer1.setInterval(1003L,sendAnalog1);
+timer2.setInterval(1003L,sendAnalog2);
+}
+void loop()
+{
+ Blynk.run();
+if ((unsigned long)(currentMillis - previousMillis) >= interval1) {
+
+timer1.run();
+ previousMillis = millis();
+}
+}
+if ((unsigned long)(currentMillis - previousMillis) >= interval2) {
+ timer2.run();
+
+ previousMillis = millis();
+}
+}
+
+}
